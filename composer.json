@@ -1,0 +1,16 @@
+{
+    "name": "joshdifabio/decor",
+    "description": "Decoration for PHP functions.",
+    "require": {
+        "php": ">=5.3"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "~4.5"
+    },
+    "autoload": {
+        "psr-4": {
+            "Decor\\": "src"
+        },
+        "files": [ "src/functions.php" ]
+    }
+}
