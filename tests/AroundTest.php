@@ -33,6 +33,36 @@ class AroundTest extends PHPUnit_Framework_TestCase
         $this->assertSame('Hello, world!', $result);
     }
 
+    public function testUnchangedArgs()
+    {
+        $shout = Decor\around(
+            function ($phrase) {
+                return $phrase;
+            },
+            function (Invoker $invoker) {
+                return $invoker() . '!';
+            }
+        );
+
+        $result = $shout('Hello, world');
+        $this->assertSame('Hello, world!', $result);
+    }
+
+    public function testDefaultValues()
+    {
+        $getFullName = Decor\around(
+            function ($firstName, $lastName, $title = 'Mr') {
+                return "$title $firstName $lastName";
+            },
+            function ($title, $lastName) {
+                return "$title $lastName";
+            }
+        );
+
+        $fullName = $getFullName('Joshua', 'Di Fabio');
+        $this->assertSame('Mr Di Fabio', $fullName);
+    }
+
     public function testSharedArg()
     {
         $shout = Decor\around(
