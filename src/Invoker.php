@@ -18,4 +18,26 @@ final class Invoker
 
         return call_user_func_array($this->subject, $arguments);
     }
+
+    /**
+     * @param string $name
+     * @return bool
+     */
+    public function hasArgument($name)
+    {
+        return array_key_exists($name, $this->arguments);
+    }
+
+    /**
+     * @param string $name
+     * @return mixed
+     */
+    public function getArgumentValue($name)
+    {
+        if (!$this->hasArgument($name)) {
+            throw new \LogicException("The subject has no argument named $name.");
+        }
+
+        return $this->arguments[$name];
+    }
 }
