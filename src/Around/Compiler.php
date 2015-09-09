@@ -29,7 +29,7 @@ final class Compiler
 
         $code = <<<PHP_CODE
 \$decorated = function ({$this->getParamsCodeForDeclaration()}) {
-    \$this->invoker = new $invokerClassName(\$this->subject, $subjectParamsArrayCode);
+    \$this->invoker = new $invokerClassName(\$this->subject, \$this->subjectParams, $subjectParamsArrayCode);
     return call_user_func(\$this->decoration, $decorationParamsCode);
 };
 PHP_CODE;

@@ -4,11 +4,16 @@ namespace Decor;
 final class Invoker
 {
     private $subject;
+    private $params;
     private $arguments;
 
-    public function __construct(callable $subject, array $arguments)
+    /**
+     * @param \ReflectionParameter[] $params
+     */
+    public function __construct(callable $subject, array $params, array $arguments)
     {
         $this->subject = $subject;
+        $this->params = $params;
         $this->arguments = $arguments;
     }
 
@@ -20,24 +25,43 @@ final class Invoker
     }
 
     /**
+     * Checks whether the subject has a parameter with the specified name
+     *
      * @param string $name
      * @return bool
      */
-    public function hasArgument($name)
+    public function hasParameter($name)
     {
         return array_key_exists($name, $this->arguments);
     }
 
     /**
-     * @param string $name
-     * @return mixed
+     * @param $name
+     * @return \ReflectionParameter
      */
-    public function getArgumentValue($name)
+    public function getParameter($name)
     {
-        if (!$this->hasArgument($name)) {
-            throw new \LogicException("The subject has no argument named $name.");
+        foreach ($this->params as $param) {
+            if ($name === $param->getName()) {
+                return $param;
+            }
         }
 
-        return $this->arguments[$name];
+        throw new \LogicException("The subject has no parameter named $name.");
+    }
+
+    /**
+     * Returns the argument provided for the specified parameter
+     *
+     * @param string $paramName
+     * @return mixed
+     */
+    public function getArgument($paramName)
+    {
+        if (!$this->hasParameter($paramName)) {
+            throw new \LogicException("The subject has no parameter named $paramName.");
+        }
+
+        return $this->arguments[$paramName];
     }
 }
